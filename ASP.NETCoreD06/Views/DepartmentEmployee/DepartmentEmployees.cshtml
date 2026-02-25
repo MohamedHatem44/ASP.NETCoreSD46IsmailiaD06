@@ -1,0 +1,53 @@
+﻿@model DepartmentEmployeesVM
+
+<div class="d-flex justify-content-center">
+    <h2 class="text-success">Department Employees</h2>
+</div>
+
+<br />
+<hr />
+<br />
+
+<div class="mb-3 form-group">
+    <label asp-for="DepartmentId" class="form-label"></label>
+    <select id="deptDropDown" asp-for="DepartmentId" class="form-select" asp-items="Model.Departments" required>
+        <option value="">-- Select Department --</option>
+    </select>
+    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+</div>
+
+
+<div id="employeesTable">
+    @* Employees table will load here *@
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $("#deptDropDown").change(function(){
+
+                // Current HTML element that triggered the event
+                var deptId = $(this).val();
+            if(deptId !== ""){
+                // Ajax call to fetch employees based on selected department
+                $.ajax({
+                    url: '/DepartmentEmployee/GetEmployeesByDepartment',
+                    type : 'GET',
+                    data: { deptId: deptId },
+                    success: function(result){
+                        $("#employeesTable").html(result);
+                    },
+                   error: function ()
+                   {
+                        alert("An error occurred while fetching employees.");
+                        $("#employeesTable").html("");
+                    }
+                })
+            }else{
+                $("#employeesTable").html("");
+            }
+            });
+        });
+    </script>
+}

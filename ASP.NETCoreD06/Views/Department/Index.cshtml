@@ -1,0 +1,99 @@
+﻿@model IEnumerable<DepartmentReadVM>
+
+<div class="d-flex justify-content-center">
+    <h2 class="text-success">Department Portal</h2>
+</div>
+
+<br />
+<hr />
+<br />
+
+<div class="d-flex justify-content-center gap-3 mb-3">
+    <a asp-action="Create" asp-controller="Department" class="btn btn-success">
+        Create New Department
+    </a>
+</div>
+
+<table class="table text-center">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(m => m.Id)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.Name)</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var department in Model)
+        {
+            <tr>
+                <th scope="row">@department.Id</th>
+                <th scope="row">@department.Name</th>
+                <th scope="row">
+
+                    <a asp-controller="Department" asp-action="Details" asp-route-id="@department.Id" class="btn btn-primary">
+                        Details
+                    </a>
+                    <a asp-controller="Department" asp-action="Edit" asp-route-id="@department.Id" class="btn btn-outline-secondary">
+                        Edit
+                    </a>
+                    <a asp-controller="Department" asp-action="Delete" asp-route-id="@department.Id" class="btn btn-outline-danger">
+                        Delete
+                    </a>
+
+                    <button type="button" class="btn btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal"
+                            data-departmentId="@department.Id"
+                            data-departmentName="@department.Name">
+                        Delete
+                    </button>
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Department</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong id="departmentname"></strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-danger" id="deleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Get the Model Element
+        const deleteModal = document.getElementById('deleteModal');
+
+        // Add Event Listener to the Modal
+        // Built in Event
+        deleteModal.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            const button = event.relatedTarget
+
+            // Extract info from data-* attributes
+            const departmentId = button.getAttribute('data-departmentId');
+            const departmentName = button.getAttribute('data-departmentName');
+
+            // Update Modal Content
+            deleteModal.querySelector('#departmentname').textContent = departmentName;
+
+            // Update Delete Button Action
+            const deleteBtn = deleteModal.querySelector('#deleteBtn');
+            deleteBtn.onclick= ()=> {
+                  window.location.href = `/Department/Delete/${departmentId}`;
+            };
+        });
+    </script>
+}

@@ -1,0 +1,11 @@
+﻿@model DepartmentReadVM
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Department Id: @Model.Id</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Department Name: @Model.Name</h6>
+        <a asp-controller="Department" asp-action="Index" class="btn btn-outline-secondary">
+            Back
+        </a>
+    </div>
+</div>
